@@ -1,0 +1,139 @@
+package be.lmenten.utils.swing.logging;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
+import javax.swing.table.AbstractTableModel;
+
+public abstract class AbstractLogRecordTableModel
+	extends AbstractTableModel
+	implements LogRecordTableModel
+{
+	private static final long serialVersionUID = 1L;
+
+	// ------------------------------------------------------------------------
+
+	private static final int COL_THREAD = 0;
+	private static final int COL_SEQUENCE = 1;
+	private static final int COL_INSTANT = 2;
+	private static final int COL_CLASS = 3;
+	private static final int COL_METHOD = 4;
+	private static final int COL_LEVEL = 5;
+	private static final int COL_MESSAGE = 6;
+	private static final int COL_PARAMETERS = 7;
+	private static final int COL_EXCEPTION = 8;
+
+	private static final String [] columns = 
+	{
+		"Thread",			// 0 
+		"#",				// 1 
+		"Time",				// 2 
+		"Class",			// 3 
+		"Method",			// 4 
+		"Level",			// 5 
+		"Message",			// 6 
+		"Parameters",		// 7 
+		"Exception",		// 8 
+	};
+
+	private static final Class<?> [] types = 
+	{
+		Integer.class,		// 0
+		Integer.class,		// 1
+		Instant.class,		// 2
+		String.class,		// 3
+		String.class,		// 4
+		Level.class,		// 5
+		String.class,		// 6
+		Boolean.class,		// 7
+		String.class		// 8
+	};
+
+	// ------------------------------------------------------------------------
+
+	protected List<LogRecord> records;
+
+	// ========================================================================
+	// ===
+	// ========================================================================
+
+	public AbstractLogRecordTableModel()
+	{
+		records = new ArrayList<>();
+	}
+
+	// ========================================================================
+	// ===
+	// ========================================================================
+
+	@Override
+	public int getColumnCount()
+	{
+		return columns.length;
+	}
+
+	@Override
+	public String getColumnName( int columnIndex )
+	{
+		return columns[ columnIndex ];
+	}
+
+	@Override
+	public Class<?> getColumnClass( int columnIndex )
+	{
+		return types[ columnIndex ];
+	}
+
+	// ========================================================================
+	// ===
+	// ========================================================================
+
+	@Override
+	public int getRowCount()
+	{
+		return records.size();
+	}
+
+	@Override
+	public Object getValueAt( int rowIndex, int columnIndex )
+	{
+		LogRecord record = records.get( rowIndex );
+
+		switch( columnIndex )
+		{
+			case COL_THREAD:
+				return record.getThreadID();
+
+			case COL_SEQUENCE:
+				return record.getSequenceNumber();
+
+			case COL_INSTANT:
+				return record.getInstant();
+
+			case COL_CLASS:
+				return record.getSourceClassName();
+
+			case COL_METHOD:
+				return record.getSourceMethodName();
+
+			case COL_LEVEL:
+				return record.getLevel();
+
+			case COL_MESSAGE:
+				return record.getMessage();
+
+			case COL_PARAMETERS:
+				return (record.getParameters() == null);
+
+			case COL_EXCEPTION:
+				return record.getThrown() == null ? null : record.getThrown().getMessage();
+
+			default:
+		}
+
+		return null;
+	}
+}
