@@ -47,23 +47,54 @@ public abstract class H2Database
 	// =
 	// =========================================================================
 
-	public void open( String username, String passwod )
-		throws SQLException
+	public void open()
+			throws SQLException
 	{
 		Properties config = new Properties();
-		config.put( "USER", username );
-		config.put( "PASSWORD", passwod );
 
 		internalOpen( config );
 	}
+
+	public void open( String username, String password )
+		throws SQLException
+	{
+		Properties config = new Properties();
+
+		if( username != null )
+		{
+			config.put( "USER", username );
+		}
+
+		if( password != null )
+		{
+			config.put( "PASSWORD", password );
+		}
+
+		internalOpen( config );
+	}
+
+	// -------------------------------------------------------------------------
 
 	public void open( String username, String password, String filePassword )
 		throws SQLException
 	{
 		Properties config = new Properties();
-		config.put( "USER", username );
-		config.put( "PASSWORD", password + " " + filePassword );
-		config.put( "CIPHER", "AES" );
+
+		if( username != null )
+		{
+			config.put( "USER", username );
+		}
+
+		if( password != null )
+		{
+			config.put( "PASSWORD", password );
+		}
+
+		if( filePassword != null )
+		{
+			config.put( "CIPHER", "AES" );
+			config.put( "PASSWORD", password + " " + filePassword );
+		}
 
 		internalOpen( config );
 	}

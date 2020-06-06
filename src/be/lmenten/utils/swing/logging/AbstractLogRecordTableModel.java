@@ -1,6 +1,7 @@
 package be.lmenten.utils.swing.logging;
 
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -13,6 +14,9 @@ public abstract class AbstractLogRecordTableModel
 	implements LogRecordTableModel
 {
 	private static final long serialVersionUID = 1L;
+
+	private final DateTimeFormatter dtf 
+		= DateTimeFormatter.ofPattern( "uuuu-MM-dd HH:mm:ss.S" );
 
 	// ------------------------------------------------------------------------
 
@@ -29,11 +33,11 @@ public abstract class AbstractLogRecordTableModel
 	private static final String [] columns = 
 	{
 		"Thread",			// 0 
-		"#",				// 1 
+		"#",					// 1 
 		"Time",				// 2 
-		"Class",			// 3 
+		"Class",				// 3 
 		"Method",			// 4 
-		"Level",			// 5 
+		"Level",				// 5 
 		"Message",			// 6 
 		"Parameters",		// 7 
 		"Exception",		// 8 
@@ -41,15 +45,28 @@ public abstract class AbstractLogRecordTableModel
 
 	private static final Class<?> [] types = 
 	{
-		Integer.class,		// 0
-		Integer.class,		// 1
-		Instant.class,		// 2
-		String.class,		// 3
-		String.class,		// 4
-		Level.class,		// 5
-		String.class,		// 6
-		Boolean.class,		// 7
-		String.class		// 8
+		Integer.class,		// 0 thread id
+		Integer.class,		// 1 message #
+		Instant.class,		// 2 time
+		String.class,		// 3 class
+		String.class,		// 4 method
+		Level.class,		// 5 level
+		String.class,		// 6 message
+		Boolean.class,		// 7 parameters
+		String.class		// 8 exception
+	};
+
+	private static final int [] widths =
+	{
+		55,
+		55,
+		215,
+		300,
+		215,
+		45,
+		450,
+		80,
+		150
 	};
 
 	// ------------------------------------------------------------------------
@@ -85,6 +102,12 @@ public abstract class AbstractLogRecordTableModel
 	public Class<?> getColumnClass( int columnIndex )
 	{
 		return types[ columnIndex ];
+	}
+
+	@Override
+	public int getColumnWidth( int columnIndex )
+	{
+		return widths[ columnIndex ];
 	}
 
 	// ========================================================================

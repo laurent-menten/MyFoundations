@@ -7,5 +7,7 @@ import javax.swing.table.TableModel;
 public interface LogRecordTableModel
 	extends TableModel
 {
+	public int getColumnWidth( int columnIndex );
+
 	public void addRecord( LogRecord record );
 }

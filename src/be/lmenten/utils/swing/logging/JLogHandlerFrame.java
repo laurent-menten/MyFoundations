@@ -1,6 +1,7 @@
 package be.lmenten.utils.swing.logging;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.logging.Handler;
@@ -12,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 public class JLogHandlerFrame
 	extends JFrame
@@ -46,7 +48,7 @@ public class JLogHandlerFrame
 					+		"<b>Cancel</b>: do nothing<br />"
 					+	"</html>"
 					;
-						
+
 				 int rc = JOptionPane.showConfirmDialog( null,
 						 message, "Alert",
 						 JOptionPane.YES_NO_CANCEL_OPTION );
@@ -65,21 +67,27 @@ public class JLogHandlerFrame
 				 }
 			}
 		} );
-
 	
 		model = new DefaultLogRecordTableModel();
 
 		logTable = new JTable( model );
 		logTable.setFillsViewportHeight( true );
 		logTable.setDefaultRenderer( Level.class, new LevelRenderer() );
-		
+
+		logTable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
+		for( int i = 0 ; i < model.getColumnCount() ; i++ )
+		{
+			int width = model.getColumnWidth( i );
+			logTable.getColumnModel().getColumn( i ).setPreferredWidth( width );
+		}
+
 		scrollPane = new JScrollPane( logTable );
 
 		getContentPane().add( scrollPane, BorderLayout.CENTER );
 		pack();
 	}
 
-	// ========================================================================
+	 // ========================================================================
 	// ===
 	// ========================================================================
 
