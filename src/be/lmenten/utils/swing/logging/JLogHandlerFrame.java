@@ -1,7 +1,6 @@
 package be.lmenten.utils.swing.logging;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.logging.Handler;
@@ -13,7 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
 
 public class JLogHandlerFrame
 	extends JFrame
@@ -55,14 +53,17 @@ public class JLogHandlerFrame
 
 				 if( rc == JOptionPane.YES_OPTION )
 				 {
+System.out.println( "exit" );
 					 System.exit( 0 );
 				 }
 				 else if( rc == JOptionPane.NO_OPTION )
 				 {
+System.out.println( "hide" );
 					 setVisible( false );
 				 }
 				 else
 				 {
+System.out.println( "do nothing" );
 					 //do nothing
 				 }
 			}

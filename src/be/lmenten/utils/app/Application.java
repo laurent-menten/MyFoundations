@@ -27,10 +27,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ResourceBundle;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
+
+import javax.swing.JOptionPane;
 
 import be.lmenten.utils.logging.AnsiLogFormatter;
 import be.lmenten.utils.logging.LogFormatter;
@@ -97,9 +101,9 @@ public abstract class Application<T extends Application<T>>
 
 		boolean keepLogFile = true;
 
-		boolean createLogWindow = true;
+		boolean createLogWindow = false;
 		boolean showLogWindow = false;
-		boolean keepLogWindowOpen = true;
+		boolean keepLogWindowOpen = false;
 
 		// ----------------------------------------------------------------------
 
@@ -295,11 +299,39 @@ public abstract class Application<T extends Application<T>>
 	// === TERMINATION =========================================================
 	// =========================================================================
 
+	static final String message
+	=	"<html>"
+	+		"<b>Yes</b>: Save data and close application<br />"
+	+		"<b>No</b>: Close appliation withoud saving<br />"
+	+		"<b>Cancel</b>: Do not close application<br />"
+	+	"</html>"
+	;
+
 	/**
 	 * 
 	 */
-	public final void finish()
+	public final void finish( boolean ask )
 	{
+		if( ask )
+		{
+			int rc = JOptionPane.showConfirmDialog( null,
+				 message, "Alert",
+				 JOptionPane.YES_NO_CANCEL_OPTION );
+
+			if( rc  == JOptionPane.CANCEL_OPTION )
+			{
+				return ;
+			}
+
+			// -------------------------------------------------------------------
+
+			if( rc == JOptionPane.YES_OPTION )
+			{
+				// FIXME relay save to application
+				System.out.println( "save ..." );
+			}
+		}
+
 		this.finished = true;
 
 		synchronized( this )
@@ -328,9 +360,28 @@ public abstract class Application<T extends Application<T>>
 	protected abstract void cleanup();
 
 	// =========================================================================
+	// === Tools ===============================================================
+	// =========================================================================
+
+	public static Logger getLogger( Class<?> clazz )
+	{
+		return Logger.getLogger( clazz.getName() );
+	}
+
+	public static Preferences getPreferences( Class<?> clazz )
+	{
+		return Preferences.userRoot().node( clazz.getName() );
+	}
+
+	public static ResourceBundle getResourceBundle( Class<?> clazz )
+	{
+		return ResourceBundle.getBundle( clazz.getName() );
+	}
+
+	// =========================================================================
 	// === LOGGING =============================================================
 	// =========================================================================
 
 	private static final Logger log
-		= Logger.getLogger( Application.class.getName() );
+		= Application.getLogger( Application.class );
 }

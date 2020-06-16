@@ -1,7 +1,6 @@
 package be.lmenten.utils.swing.logging;
 
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -14,9 +13,6 @@ public abstract class AbstractLogRecordTableModel
 	implements LogRecordTableModel
 {
 	private static final long serialVersionUID = 1L;
-
-	private final DateTimeFormatter dtf 
-		= DateTimeFormatter.ofPattern( "uuuu-MM-dd HH:mm:ss.S" );
 
 	// ------------------------------------------------------------------------
 
